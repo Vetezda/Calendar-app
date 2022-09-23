@@ -7,19 +7,19 @@ const crearUsuario = async( req= request, res = response ) => {
     const { name, email, password } = req.body;
     
     try {
-        const usuario = new Usuario( req.body);
+        const usuario = new Usuario( req.body );
 
         const salt = bcryptjs.genSaltSync();
         usuario.password = bcryptjs.hashSync( password, salt );
     
+        console.log(usuario.id);
         await usuario.save();
-
         const token = await generarJWT( usuario.id, usuario.name );
         
         res.status(201).json({
             ok : true, 
             msg: 'Usuario creado',
-            uid: usuario.uid,
+            uid: usuario.id,
             name: usuario.name,
             token
         });    
@@ -63,7 +63,7 @@ const loginUsuario = async( req= request, res = response ) => {
         res.json({
             ok : true, 
             msg: 'Usuario logeado',
-            uid: usuario.uid,
+            uid: usuario.id,
             name: usuario.name,
             token
         });
